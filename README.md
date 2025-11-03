@@ -1,3 +1,5 @@
+## Voraussetzungen
+Anaconda-Environment mit python und den Paketen pymunk und pygame
 ## Start 
 1. Anaconda starten
 2. In das pymonk-Environment wechseln
