@@ -106,7 +106,7 @@ class BouncyBalls(object):
         if self._ticks_to_next_ball <= 0:
             self._create_ball()
             self._ticks_to_next_ball = 100
-        # Remove balls that fall below 100 vertically
+        # Remove balls that pass the configured y-threshold
         balls_to_remove = [ball for ball in self._balls if ball.body.position.y > 500]
         for ball in balls_to_remove:
             self._space.remove(ball, ball.body)
@@ -127,7 +127,7 @@ class BouncyBalls(object):
         # Fallhöhe verdoppeln: höhere Startposition (näher am oberen Bildschirmrand)
         body.position = x, 80
         shape = pymunk.Circle(body, radius, (0, 0))
-        shape.elasticity = 0.95
+        shape.elasticity = 0.98
         shape.friction = 0.9
         self._space.add(body, shape)
         self._balls.append(shape)

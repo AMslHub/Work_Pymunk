@@ -12,8 +12,10 @@ Evtl. mit pip install in der Powershell installieren.
 
 ## Repository 
 ### Überprüfung der Github-Konfiguration
-Neuses Terminal erzeugen. <br>
-```git config --list```
+Neues Terminal erzeugen. <br>
+```git config --list```<br>
+oder auch <br>
+```git remote -v```<br>
 
 ### Falls Der Github-Name und die Email gesetzt werden müssen:
 

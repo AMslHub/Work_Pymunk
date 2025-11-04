@@ -11,7 +11,7 @@ import pymunk
 from pymunk.vec2d import Vec2d
 
 window = pyglet.window.Window()
-space = pymunk.Space()
+space  = pymunk.Space()
 
 space.gravity = 0, -900
 space.damping = 0.999
