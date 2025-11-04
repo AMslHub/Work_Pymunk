@@ -26,7 +26,7 @@ import pymunk.pygame_util
 
 # Grundlegendes
 N_MASSES = 150              # Anzahl Massen
-MASS_KG = 0.1               # Masse je Körper [kg]
+MASS_KG = 0.05               # Masse je Körper [kg]
 
 # Federlängen
 L0_M = 0.1                  # entspannte Federlänge (Ruhelänge) l0 [m]
@@ -36,7 +36,7 @@ PIXELS_PER_METER = 50.0     # Skalierung [px/m]
 
 # Federparameter
 SPRING_STIFFNESS = 1200.0   # Federsteifigkeit (Pymunk-Einheiten)
-SPRING_DAMPING = 4.0       # Federdämpfung 8
+SPRING_DAMPING = 8.0       # Federdämpfung 8
 
 # Gravitation und Reibung (Dämpfung)
 GRAVITY = (0.0, 0.0)      # initial g=0; z.B. (0, 9.81*PIXELS_PER_METER)
