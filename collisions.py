@@ -1,8 +1,6 @@
 """This example attempts to display collision points, and the callbacks"""
 
-import functools
 import math
-import random
 import sys
 
 import pygame

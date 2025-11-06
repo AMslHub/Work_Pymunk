@@ -25,9 +25,7 @@ Abhängigkeiten:
 
 from __future__ import annotations
 
-import os
-import math 
-import time
+import math
 from pathlib import Path
 
 import pygame
@@ -44,7 +42,7 @@ except Exception:  # pragma: no cover
 WIDTH, HEIGHT = 800, 600
 PPM = 100.0  # Pixel pro Meter
 FPS = 60
-DURATION_S = 10.0 
+DURATION_S = 10.0
 NUM_FRAMES = int(DURATION_S * FPS)
 
 GRAVITY_M_S2 = 9.81
@@ -75,6 +73,7 @@ CEIL_COLOR = (220, 220, 220)
 
 MASS_RADIUS = 12  # px
 
+
 # Zeichnungsradius abhängig von der Masse (Fläche ~ Masse ⇒ r ~ sqrt(m))
 def mass_to_draw_radius(mass: float) -> int:
     base = MASS_RADIUS  # Basisradius für 1 kg
@@ -82,6 +81,7 @@ def mass_to_draw_radius(mass: float) -> int:
         return max(2, int(base))
     r = base * math.sqrt(mass / 1.0)
     return max(2, int(round(r)))
+
 
 # Linke Wand: 0.2 m links vom Aufhängepunkt, Darstellung und Physik-Parameter
 WALL_COLOR = (180, 220, 180)
@@ -106,7 +106,10 @@ def setup_space() -> tuple[pymunk.Space, pymunk.Body, pymunk.Body, Vec2d]:
 
     # Anfangsbedingungen: leichte horizontale Auslenkung, damit Bewegung sichtbar ist
     # Gleichgewichtslage ca. top_anchor.y + L1_PX + L2_PX
-    body1.position = top_anchor + (120, L1_PX + 10)  # leicht gedehnt und seitlich versetzt
+    body1.position = top_anchor + (
+        120,
+        L1_PX + 10,
+    )  # leicht gedehnt und seitlich versetzt
     body2.position = body1.position + (80, L2_PX + 10)
 
     shape1 = pymunk.Circle(body1, MASS_RADIUS)
@@ -152,7 +155,9 @@ def setup_space() -> tuple[pymunk.Space, pymunk.Body, pymunk.Body, Vec2d]:
     return space, body1, body2, top_anchor
 
 
-def draw_scene(surface: pygame.Surface, body1: pymunk.Body, body2: pymunk.Body, top_anchor: Vec2d) -> None:
+def draw_scene(
+    surface: pygame.Surface, body1: pymunk.Body, body2: pymunk.Body, top_anchor: Vec2d
+) -> None:
     surface.fill(BG_COLOR)
 
     p1 = body1.position
@@ -166,8 +171,16 @@ def draw_scene(surface: pygame.Surface, body1: pymunk.Body, body2: pymunk.Body, 
     pygame.draw.circle(surface, CEIL_COLOR, (int(top_anchor.x), int(top_anchor.y)), 4)
 
     # Federn als Linien zeichnen
-    pygame.draw.line(surface, SPRING_COLOR, (int(top_anchor.x), int(top_anchor.y)), (int(p1.x), int(p1.y)), 2)
-    pygame.draw.line(surface, SPRING_COLOR, (int(p1.x), int(p1.y)), (int(p2.x), int(p2.y)), 2)
+    pygame.draw.line(
+        surface,
+        SPRING_COLOR,
+        (int(top_anchor.x), int(top_anchor.y)),
+        (int(p1.x), int(p1.y)),
+        2,
+    )
+    pygame.draw.line(
+        surface, SPRING_COLOR, (int(p1.x), int(p1.y)), (int(p2.x), int(p2.y)), 2
+    )
 
     # Massen (Zeichnungsradius skaliert mit Masse)
     r1 = mass_to_draw_radius(MASS_1)
@@ -199,7 +212,9 @@ def main() -> None:
 
     if imageio is not None:
         try:
-            writer = imageio.get_writer(str(output_path), fps=FPS, codec="libx264", quality=7)
+            writer = imageio.get_writer(
+                str(output_path), fps=FPS, codec="libx264", quality=7
+            )
             use_video = True
         except Exception:
             writer = None
@@ -258,7 +273,9 @@ def main() -> None:
         print(f"Video gespeichert: {output_path}")
     else:
         print("PNG-Frames gespeichert. Erstelle ein Video z.B. mit:")
-        print("ffmpeg -r 60 -i frames/frame_%05d.png -c:v libx264 -pix_fmt yuv420p output.mp4")
+        print(
+            "ffmpeg -r 60 -i frames/frame_%05d.png -c:v libx264 -pix_fmt yuv420p output.mp4"
+        )
 
     pygame.quit()
 

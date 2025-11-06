@@ -25,37 +25,39 @@ import pymunk.pygame_util
 # -----------------------------
 
 # Grundlegendes
-N_MASSES = 150              # Anzahl Massen
-MASS_KG = 0.05               # Masse je Körper [kg]
+N_MASSES = 150  # Anzahl Massen
+MASS_KG = 0.05  # Masse je Körper [kg]
 
 # Federlängen
-L0_M = 0.1                  # entspannte Federlänge (Ruhelänge) l0 [m]
-LV_M = 0.12                 # Vorspannungslänge lv (Start-Abstand pro Segment) [m]
+L0_M = 0.1  # entspannte Federlänge (Ruhelänge) l0 [m]
+LV_M = 0.12  # Vorspannungslänge lv (Start-Abstand pro Segment) [m]
 
-PIXELS_PER_METER = 50.0     # Skalierung [px/m]
+PIXELS_PER_METER = 50.0  # Skalierung [px/m]
 
 # Federparameter
-SPRING_STIFFNESS = 1200.0   # Federsteifigkeit [N/m]
-SPRING_DAMPING = 8.0       # Federdämpfung [N·s/m]
+SPRING_STIFFNESS = 1200.0  # Federsteifigkeit [N/m]
+SPRING_DAMPING = 8.0  # Federdämpfung [N·s/m]
 
 # Körpergeometrie (SI)
-MASS_RADIUS_M = 0.04       # Radius der Massen [m]
+MASS_RADIUS_M = 0.04  # Radius der Massen [m]
 
 # Gravitation und Reibung (Dämpfung)
-GRAVITY = (0.0, 0.0)      # initial g=0; SI: (0, -9.81) für ~1g nach unten
-SPACE_DAMPING = 1.0       # =1.0: keine Dämpfung, <1.0: Dämpfung
-                          # space.damping ist ein Multiplikationsfaktor 
-                          # für die Geschwindigkeit pro Integrationsschritt
+GRAVITY = (0.0, 0.0)  # initial g=0; SI: (0, -9.81) für ~1g nach unten
+SPACE_DAMPING = 1.0  # =1.0: keine Dämpfung, <1.0: Dämpfung
+# space.damping ist ein Multiplikationsfaktor
+# für die Geschwindigkeit pro Integrationsschritt
 
 # Impuls der ersten Feder (linkes Ende)
-IMPULSE_TIME_S = 0.25       # Zeitpunkt nach Start [s]
-ANCHOR_LIFT_M = 0.5         # Sprung nach oben [m]
+IMPULSE_TIME_S = 0.25  # Zeitpunkt nach Start [s]
+ANCHOR_LIFT_M = 0.5  # Sprung nach oben [m]
 
 # Fenster / Darstellung
 WIDTH, HEIGHT = 1200, 600
 FPS_LIMIT = 60
-MASS_RADIUS_PX = 2          # (veraltet) Darstellungsradius [px] – wird dynamisch aus MASS_RADIUS_M berechnet
-LINE_COLOR = (30, 144, 255) # Farbe der Federlinien (DodgerBlue)
+MASS_RADIUS_PX = (
+    2  # (veraltet) Darstellungsradius [px] – wird dynamisch aus MASS_RADIUS_M berechnet
+)
+LINE_COLOR = (30, 144, 255)  # Farbe der Federlinien (DodgerBlue)
 MASS_COLOR = (10, 10, 10)
 BG_COLOR = (245, 245, 245)
 WALL_COLOR = (180, 180, 180)
@@ -64,9 +66,11 @@ WALL_COLOR = (180, 180, 180)
 def m_to_px(x_m: float) -> float:
     return x_m * PIXELS_PER_METER
 
+
 # Welt→Bildschirm Abbildung (nur für Darstellung)
 OFFSET_LEFT_PX = 100.0
 BASELINE_PX = HEIGHT * 0.5
+
 
 def world_to_screen(p: pymunk.Vec2d | tuple[float, float]) -> tuple[float, float]:
     x, y = (p.x, p.y) if isinstance(p, pymunk.Vec2d) else p
@@ -136,7 +140,12 @@ class MassSpringChain:
 
         # Optionale Darstellung der Wand (als dünnes Segment in SI)
         wall_half_h_m = max(0.1, (HEIGHT - 80) / PIXELS_PER_METER * 0.5)
-        self.wall_shape = pymunk.Segment(self.right_anchor, (wall_x_m, -wall_half_h_m), (wall_x_m, wall_half_h_m), 0.01)
+        self.wall_shape = pymunk.Segment(
+            self.right_anchor,
+            (wall_x_m, -wall_half_h_m),
+            (wall_x_m, wall_half_h_m),
+            0.01,
+        )
         self.wall_shape.color = (*WALL_COLOR, 255)
         self.wall_shape.elasticity = 0.0
         self.wall_shape.friction = 0.0
@@ -214,7 +223,9 @@ class MassSpringChain:
                 k = event.key
                 if k == pygame.K_g:
                     # Toggle Gravitation zwischen 0 und ~1g
-                    self.gravity_index = (self.gravity_index + 1) % len(self.gravity_presets)
+                    self.gravity_index = (self.gravity_index + 1) % len(
+                        self.gravity_presets
+                    )
                     self.space.gravity = self.gravity_presets[self.gravity_index]
                 elif k == pygame.K_1:
                     # Dämpfung verringern
@@ -279,7 +290,9 @@ class MassSpringChain:
         # Massen als kleine Kreise (Darstellung)
         for body in self.bodies:
             sx, sy = world_to_screen(body.position)
-            pygame.draw.circle(self.screen, MASS_COLOR, (int(sx), int(sy)), self.mass_radius_px)
+            pygame.draw.circle(
+                self.screen, MASS_COLOR, (int(sx), int(sy)), self.mass_radius_px
+            )
 
         # Optionale Debug-Zeichnung der Shapes (kleine Kreise) und Wand
         # self.space.debug_draw(self.draw_options)
